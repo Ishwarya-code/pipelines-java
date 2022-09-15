@@ -30,4 +30,10 @@ steps:
     SourceFolder: '$(System.DefaultWorkingDirectory)'
     Contents: '**/target/*.?(war|jar)'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
+- upload: $(Build.ArtifactStagingDirectory)
+  artifact: drop
+
+
+
+
 
