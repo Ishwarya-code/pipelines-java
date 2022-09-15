@@ -25,6 +25,8 @@ pool:
      SourceFolder: '$(system.defaultworkingdirectory)'
      Contents: '**/*.war'
      TargetFolder: '$(build.artifactstagingdirectory)'
+  - upload: $(build.artifactstagingdirectory)
+    artifact: drop
   - task: PublishBuildArtifacts@1
     inputs:
      PathtoPublish: '$(build.artifactstagingdirectory)'
@@ -40,38 +42,11 @@ jobs:
     resourceType: VirtualMachine
     tags: web2
   strategy:
-      rolling:
-        maxParallel: 2  #for percentages, mention as x%
-        preDeploy:
-          steps:
-          - download: current
-            artifact: drop
-          - script: echo initialize, cleanup, backup, install certs
+      runOnce:
         deploy:
           steps:
-          - task: Bash@3
-            inputs:
-              targetType: 'inline'
-              script: |
+          - script: |
                 # Modify deployment script based on the app type
                 echo "Starting deployment script run"
-                sudo java -jar '$(build.artifactstagingdirectory)/drop/target/helloworld.war'
-        routeTraffic:
-          steps:
-          - script: echo routing traffic
-        postRouteTraffic:
-          steps:
-          - script: echo health check post-route traffic
-        on:
-          failure:
-            steps:
-            - script: echo Restore from backup! This is on failure
-          success:
-            steps:
-            - script: echo Notify! This is on success
-
-
-
-
-
+                sudo java -jar '$(Pipeline.Workspace)/drop/**/target/*.war'
 
