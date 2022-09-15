@@ -35,7 +35,7 @@ pool:
 jobs:
 - deployment: VMDeploy
   environment:
-   name:  linuxvirtualmachine
+   name:  DeployVm
    resourceType: VirtualMachine
    tags: web1
   strategy:
