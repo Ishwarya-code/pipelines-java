@@ -20,11 +20,16 @@ pool:
       publishJUnitResults: true
       testResultsFiles: '**/surefire-reports/TEST-*.xml'
       goals: 'package'
-  - task: PublishPipelineArtifact@1
+  - task: CopyFiles@2
     inputs:
-      targetPath: '$(Pipeline.Workspace)'
-      artifact: 'java'
-      publishLocation: 'pipeline'
+     SourceFolder: '$(system.defaultworkingdirectory)'
+     Contents: '**/*.war'
+     TargetFolder: '$(build.artifactstagingdirectory)'
+  - task: PublishBuildArtifacts@1
+    inputs:
+     PathtoPublish: '$(build.artifactstagingdirectory)'
+     ArtifactName: 'drop'
+     publishLocation: 'Container'
 
 jobs: 
 - deployment: VMDeploy
