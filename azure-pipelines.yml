@@ -25,4 +25,9 @@ steps:
     targetPath: '$(Pipeline.Workspace)'
     artifact: 'javaPipeline'
     publishLocation: 'pipeline'
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    Contents: '**/target/*.?(war|jar)'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
