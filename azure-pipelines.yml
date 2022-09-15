@@ -29,8 +29,6 @@ pool:
 jobs: 
 - deployment: VMDeploy
   displayName: web
-  pool:
-    vmImage: 'ubuntu-latest'
   environment:
     name: DeployVm
     resourceType: VirtualMachine
