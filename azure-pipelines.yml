@@ -34,9 +34,9 @@ steps:
   artifact: drop
 - deployment: VMDeploy
   environment:
-  name:  linuxvirtualmachine
-  resourceType: VirtualMachine
-  tags: web1 
+   name:  linuxvirtualmachine
+   resourceType: VirtualMachine
+   tags: web1 
 
 
 
