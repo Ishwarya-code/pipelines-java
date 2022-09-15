@@ -30,9 +30,9 @@ jobs:
 - deployment: VMDeploy
   displayName: web
   environment:
-    name: DeployVm
+    name: VMDeploy
     resourceType: VirtualMachine
-    tags: web1
+    tags: web2
   strategy:
       rolling:
         maxParallel: 2  #for percentages, mention as x%
