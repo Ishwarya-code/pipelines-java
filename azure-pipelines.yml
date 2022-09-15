@@ -63,7 +63,6 @@ stages:
                 echo "Starting deployment script run"
                 echo $(Pipeline.Workspace)
                 echo $(build.artifactstagingdirectory)
-                sudo apt-get update
                 sudo apt install openjdk-11-jre-headless -y
-                sudo java -jar '$(Pipeline.Workspace)\drop\helloworld.war'
+                sudo java -jar '$(Pipeline.Workspace)/drop/target/helloworld.war'
 
