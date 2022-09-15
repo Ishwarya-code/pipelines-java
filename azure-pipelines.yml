@@ -23,7 +23,7 @@
   - task: PublishPipelineArtifact@1
     inputs:
       targetPath: '$(Pipeline.Workspace)'
-      artifact: 'drop'
+      artifact: 'javapipeline'
       publishLocation: 'pipeline'
   - task: CopyFiles@2
     inputs:
@@ -31,7 +31,7 @@
       Contents: '**/target/*.?(war|jar)'
       TargetFolder: '$(Build.ArtifactStagingDirectory)'
   - upload: $(Build.ArtifactStagingDirectory)
-    artifact: drop
+    artifact: javapipeline
 
 
 
