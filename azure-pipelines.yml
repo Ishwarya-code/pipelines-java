@@ -4,44 +4,47 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/java
 
 trigger:
-  - main
+- main
+stages:
+- stage: build
+  jobs:
+  - job: run_build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Maven@3
+      inputs:
+       mavenPomFile: 'pom.xml'
+       mavenOptions: '-Xmx3072m'
+       javaHomeOption: 'JDKVersion'
+       jdkVersionOption: '1.8'
+       jdkArchitectureOption: 'x64'
+       publishJUnitResults: true
+       testResultsFiles: '**/surefire-reports/TEST-*.xml'
+       goals: 'package'
+    - task: CopyFiles@2
+      inputs:
+       SourceFolder: '$(system.defaultworkingdirectory)'
+       Contents: '**/*.war'
+       TargetFolder: '$(build.artifactstagingdirectory)'
+    - publish: $(build.artifactstagingdirectory)
+      artifact: drop
+    # - task: PublishBuildArtifacts@1
+    #   inputs:
+    #    PathtoPublish: '$(build.artifactstagingdirectory)'
+    #    ArtifactName: 'drop'
+    #    publishLocation: 'Container'
 
-pool:
-  vmImage: ubuntu-latest
- 
-  steps:
-  - task: Maven@3
-    inputs:
-      mavenPomFile: 'pom.xml'
-      mavenOptions: '-Xmx3072m'
-      javaHomeOption: 'JDKVersion'
-      jdkVersionOption: '1.8'
-      jdkArchitectureOption: 'x64'
-      publishJUnitResults: true
-      testResultsFiles: '**/surefire-reports/TEST-*.xml'
-      goals: 'package'
-  - task: CopyFiles@2
-    inputs:
-     SourceFolder: '$(system.defaultworkingdirectory)'
-     Contents: '**/*.war'
-     TargetFolder: '$(build.artifactstagingdirectory)'
-  - upload: $(build.artifactstagingdirectory)
-    artifact: drop
-  - task: PublishBuildArtifacts@1
-    inputs:
-     PathtoPublish: '$(build.artifactstagingdirectory)'
-     ArtifactName: 'drop'
-     publishLocation: 'Container'
-
-
-jobs: 
-- deployment: VMDeploy
-  displayName: web
-  environment:
-    name: VMDeploy
-    resourceType: VirtualMachine
-    tags: web2
-  strategy:
+- stage: test
+  dependsOn: build
+  jobs:
+  - deployment: VMDeploy
+    displayName: web
+    environment:
+      name: VMDeploy
+      resourceType: VirtualMachine
+      tags: web2
+    strategy:
       runOnce:
         preDeploy:
           steps:
@@ -61,5 +64,5 @@ jobs:
                 echo $(Pipeline.Workspace)
                 echo $(build.artifactstagingdirectory)
                 sudo apt install openjdk-11-jre-headless -Y
-                sudo java -jar '$(Pipeline.Workspace)/drop/**/target/*.war'
+                sudo java -jar '$(Pipeline.Workspace)\drop\helloworld.war'
 
