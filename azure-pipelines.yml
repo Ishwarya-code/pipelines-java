@@ -55,7 +55,7 @@ jobs:
               script: |
                 # Modify deployment script based on the app type
                 echo "Starting deployment script run"
-                sudo java -jar '$(System.DefaultWorkingDirectory)/Ishwarya-code.pipelines-java/drop/target/helloworld.war'
+                sudo java -jar '$(build.artifactstagingdirectory)/drop/target/helloworld.war'
         routeTraffic:
           steps:
           - script: echo routing traffic
