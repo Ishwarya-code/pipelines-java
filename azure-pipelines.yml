@@ -43,10 +43,23 @@ jobs:
     tags: web2
   strategy:
       runOnce:
+        preDeploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            inputs:
+             source: 'current'
+             artifact: drop
+             path: '$(Pipeline.Workspace)'        
         deploy:
           steps:
+          - task: Bash@3
+            inputs:
+              targetType: 'inline'            
           - script: |
                 # Modify deployment script based on the app type
                 echo "Starting deployment script run"
+                echo $(Pipeline.Workspace)
+                echo $(build.artifactstagingdirectory)
+                sudo apt install openjdk-11-jre-headless -Y
                 sudo java -jar '$(Pipeline.Workspace)/drop/**/target/*.war'
 
