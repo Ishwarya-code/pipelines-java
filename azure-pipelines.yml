@@ -28,6 +28,6 @@ steps:
     publishLocation: 'pipeline'
 - task: AzureWebApp@1
   inputs:
-    azureSubscription: '964df7ca-3ba4-48b6-a695-1ed9db5723f8'
+    azureSubscription: 'P2-Real Hands-On Labs(964df7ca-3ba4-48b6-a695-1ed9db5723f8)'
     appName: 'Mywebapp-1'
     package: $(System.DefaultWorkingDirectory)/**/*.zip   
