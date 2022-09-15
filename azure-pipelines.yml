@@ -29,9 +29,12 @@ pool:
 jobs: 
 - deployment: VMDeploy
   displayName: web
+  pool:
+    vmImage: 'ubuntu-latest'
   environment:
-    name: <environment name>
+    name: DeployVm
     resourceType: VirtualMachine
+    tags: web1
   strategy:
       rolling:
         maxParallel: 2  #for percentages, mention as x%
