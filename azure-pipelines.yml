@@ -26,3 +26,9 @@ steps:
     targetPath: '$(Pipeline.Workspace)'
     artifact: 'java-pipeline'
     publishLocation: 'pipeline'
+
+- task: AzureWebApp@1
+  inputs:
+    azureSubscription: ''
+    appName: 'Mywebapp-1'
+    package: $(System.DefaultWorkingDirectory)/**/*.zip   
